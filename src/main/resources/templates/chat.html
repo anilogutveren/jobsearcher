@@ -1,6 +1,6 @@
 <!-- src/main/resources/templates/chat.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>Chat with Jobsearcher</title>
@@ -108,17 +108,16 @@
     <pre th:text="${reply}"></pre>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form action="/upload" method="post" enctype="multipart/form-data">
     <p>
         <label for="cvUpload">Upload your CV:</label>
-        <input type="file" id="cvUpload" name="cvUpload" accept=".pdf,.doc,.docx">
-        <button type="submit" formaction="/upload/cv">Submit CV</button>
+        <input type="file" id="cvUpload" name="cv" accept=".pdf">
     </p>
     <p>
         <label for="coverLetterUpload">Upload your Cover Letter:</label>
-        <input type="file" id="coverLetterUpload" name="coverLetterUpload" accept=".pdf,.doc,.docx">
-        <button type="submit" formaction="/upload/coverletter">Submit Cover Letter</button>
+        <input type="file" id="coverLetterUpload" name="coverLetter" accept=".pdf">
     </p>
+    <button type="submit">Submit</button>
 </form>
 </body>
 </html>
