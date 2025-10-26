@@ -28,6 +28,8 @@ dependencies {
 	implementation("org.springframework.ai:spring-ai-tika-document-reader")
 	implementation("org.springframework.ai:spring-ai-pdf-document-reader")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

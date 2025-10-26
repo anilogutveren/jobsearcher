@@ -1,0 +1,101 @@
+<!-- src/main/resources/templates/chat.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Chat with Jobsearcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f0f8ff, #4682b4);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            background-color: #4682b4;
+            margin: 0;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4682b4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #5a9bd6;
+        }
+
+        pre {
+            background: #f6f6f6;
+            padding: 12px;
+            white-space: pre-wrap;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<h1>Chat with Jobsearcher</h1>
+<h2 th:text="${message}">Default message</h2>
+
+<form th:action="@{/processUserPrompt}" method="post">
+    <div>
+        <label for="userInput">Your message</label><br/>
+        <textarea id="userInput" name="userInput" required th:text="${userInput}"></textarea>
+    </div>
+    <div>
+        <button type="submit">Send</button>
+    </div>
+</form>
+
+<div th:if="${reply}">
+    <h2>Response</h2>
+    <pre th:text="${reply}"></pre>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    <p>
+        <label for="cvUpload">Upload your CV:</label>
+        <input type="file" id="cvUpload" name="cvUpload" accept=".pdf,.doc,.docx">
+        <button type="submit" formaction="/upload/cv">Submit CV</button>
+    </p>
+    <p>
+        <label for="coverLetterUpload">Upload your Cover Letter:</label>
+        <input type="file" id="coverLetterUpload" name="coverLetterUpload" accept=".pdf,.doc,.docx">
+        <button type="submit" formaction="/upload/coverletter">Submit Cover Letter</button>
+    </p>
+</form>
+</body>
+</html>
