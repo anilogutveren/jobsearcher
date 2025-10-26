@@ -1,6 +1,11 @@
 spring:
   application:
     name: jobsearcher
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jobsearchDB
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
@@ -13,3 +18,12 @@ spring:
   docker:
     compose:
       lifecycle-management: start_only
+
+logging:
+  level:
+    org:
+      apache:
+        pdfbox:
+          pdmodel:
+            font:
+              FileSystemFontProvider: ERROR

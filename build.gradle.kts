@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.5.6"
+	id("org.springframework.boot") version "3.5.7"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -18,7 +18,7 @@ repositories {
 	mavenCentral()
 }
 
-extra["springAiVersion"] = "1.0.3"
+extra["springAiVersion"] = "1.1.0-M3"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -26,7 +26,8 @@ dependencies {
 	implementation("org.springframework.ai:spring-ai-starter-model-openai")
 	implementation("org.springframework.ai:spring-ai-starter-vector-store-pgvector")
 	implementation("org.springframework.ai:spring-ai-tika-document-reader")
-	implementation("org.springframework.ai:spring-ai-pgvector-store-spring-boot-starter")
+	implementation("org.springframework.ai:spring-ai-pdf-document-reader")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
