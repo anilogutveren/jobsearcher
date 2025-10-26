@@ -18,6 +18,9 @@ spring:
   docker:
     compose:
       lifecycle-management: start_only
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 logging:
   level:

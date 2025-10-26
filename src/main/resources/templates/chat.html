@@ -64,6 +64,29 @@
             white-space: pre-wrap;
             border-radius: 4px;
         }
+
+        .reply-box {
+            background: #e6f2ff;
+            border: 1px solid #b3d1ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 600px;
+            box-shadow: 0 2px 8px rgba(70, 130, 180, 0.08);
+        }
+
+        .reply-box h2 {
+            margin-top: 0;
+            color: #4682b4;
+        }
+
+        .reply-box pre {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            color: #222;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +103,7 @@
     </div>
 </form>
 
-<div th:if="${reply}">
+<div th:if="${reply}" class="reply-box">
     <h2>Response</h2>
     <pre th:text="${reply}"></pre>
 </div>
