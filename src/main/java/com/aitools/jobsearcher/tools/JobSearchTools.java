@@ -1,6 +1,5 @@
 package com.aitools.jobsearcher.tools;
 
-import com.aitools.jobsearcher.model.JobEntity;
 import com.aitools.jobsearcher.service.IngestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDateTime;
 
 @Component

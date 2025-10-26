@@ -1,9 +1,8 @@
-<!-- src/main/resources/templates/chat.html -->
 <!DOCTYPE html>
-<html lang xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Chat with Jobsearcher</title>
+    <meta charset="UTF-8">
+    <title>Upload your CV and Cover Letter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +11,6 @@
             margin: 0;
             padding: 0;
         }
-
         h1 {
             text-align: center;
             color: #fff;
@@ -20,30 +18,26 @@
             background-color: #4682b4;
             margin: 0;
         }
-
         form {
             max-width: 600px;
-            margin: 20px auto;
+            margin: 40px auto;
             background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 8px;
         }
-
-        textarea {
+        input[type="file"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         button {
             background-color: #4682b4;
             color: #fff;
@@ -53,59 +47,35 @@
             cursor: pointer;
             font-size: 16px;
         }
-
         button:hover {
             background-color: #5a9bd6;
         }
-
-        pre {
-            background: #f6f6f6;
-            padding: 12px;
-            white-space: pre-wrap;
-            border-radius: 4px;
-        }
-
-        .reply-box {
+        .message {
+            max-width: 600px;
+            margin: 20px auto;
             background: #e6f2ff;
             border: 1px solid #b3d1ff;
             border-radius: 8px;
             padding: 20px;
-            margin: 30px auto;
-            max-width: 600px;
-            box-shadow: 0 2px 8px rgba(70, 130, 180, 0.08);
-        }
-
-        .reply-box h2 {
-            margin-top: 0;
             color: #4682b4;
-        }
-
-        .reply-box pre {
-            background: transparent;
-            padding: 0;
-            border-radius: 0;
-            color: #222;
-            font-size: 1.1em;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<h1>Chat with Jobsearcher</h1>
-<h2 th:text="${message}">Default message</h2>
-
-<form th:action="@{/processUserPrompt}" method="post">
-    <div>
-        <label for="userInput">Your message</label><br/>
-        <textarea id="userInput" name="userInput" required th:text="${userInput}"></textarea>
-    </div>
-    <div>
-        <button type="submit">Send</button>
-    </div>
+<h1>Upload your CV and Cover Letter</h1>
+<div th:if="${message}" class="message" th:text="${message}"></div>
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <p>
+        <label for="cvUpload">Upload your CV:</label>
+        <input type="file" id="cvUpload" name="cv" accept=".pdf">
+    </p>
+    <p>
+        <label for="coverLetterUpload">Upload your Cover Letter:</label>
+        <input type="file" id="coverLetterUpload" name="coverLetter" accept=".pdf">
+    </p>
+    <button type="submit">Submit</button>
 </form>
-
-<div th:if="${reply}" class="reply-box">
-    <h2>Response</h2>
-    <pre th:text="${reply}"></pre>
-</div>
 </body>
 </html>
+

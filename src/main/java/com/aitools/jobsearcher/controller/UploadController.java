@@ -65,6 +65,6 @@ public class UploadController {
         }
 
         model.addAttribute("message", message.toString().trim());
-        return "result";
+        return "chat";
     }
 }
