@@ -1,4 +1,4 @@
-package com.aitools.jobsearcher.controller;
+package com.aitools.jobsearcher.adapter.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ public class PageController {
 
     @GetMapping("/chat")
     public String handleChat(Model model) {
-        model.addAttribute("message", "Hello from Anils Searcher");
+        model.addAttribute("message", "Hello from Anils Job Searcher");
         return "chat";
     }
 }

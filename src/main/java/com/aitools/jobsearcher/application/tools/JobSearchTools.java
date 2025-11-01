@@ -1,6 +1,6 @@
-package com.aitools.jobsearcher.tools;
+package com.aitools.jobsearcher.application.tools;
 
-import com.aitools.jobsearcher.service.IngestionService;
+import com.aitools.jobsearcher.application.service.IngestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;

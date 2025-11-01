@@ -1,6 +1,6 @@
-package com.aitools.jobsearcher.controller;
+package com.aitools.jobsearcher.adapter.controller;
 
-import com.aitools.jobsearcher.service.IngestionService;
+import com.aitools.jobsearcher.application.service.IngestionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
