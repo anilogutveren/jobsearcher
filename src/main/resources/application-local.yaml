@@ -5,9 +5,9 @@ spring:
   application:
     name: jobsearcher
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/jobsearchDB
+    username: user
+    password: password
     driver-class-name: org.postgresql.Driver
   ai:
     openai:
@@ -24,6 +24,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 tavily:
   api-key: ${TAVILY_API_KEY}
