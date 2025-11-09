@@ -35,3 +35,9 @@ logging:
           pdmodel:
             font:
               FileSystemFontProvider: ERROR
+      springframework:
+        ai:
+          chat:
+            client:
+              advisor:
+                SimpleLoggerAdvisor: INFO

@@ -8,6 +8,7 @@ import com.aitools.jobsearcher.domain.model.PromptStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -29,10 +30,13 @@ public class ProcessUserPrompt {
 
     private final JobSearchTools jobSearchTools;
 
+    private final SimpleLoggerAdvisor simpleLoggerAdvisor;
+
     public ProcessUserPrompt(ChatClient.Builder builder,
                              VectorStore vectorStore,
                              JobSearchTools jobSearchTools,
-                             UserPromptRepositoryAdapter userPromptRepositoryAdapter) {
+                             UserPromptRepositoryAdapter userPromptRepositoryAdapter,
+                             SimpleLoggerAdvisor simpleLoggerAdvisor) {
 
         OpenAiChatOptions chatOptions = OpenAiChatOptions.builder()
                 .model("gpt-4o")
@@ -44,6 +48,7 @@ public class ProcessUserPrompt {
                 .defaultOptions(chatOptions)
                 .build();
         this.jobSearchTools = jobSearchTools;
+        this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
 
     public String execute(ProcessUserPromptCommand command) {
@@ -55,18 +60,12 @@ public class ProcessUserPrompt {
                 Instant.now());
         promptEntity = userPromptRepositoryAdapter.saveOrUpdate(promptEntity);
 
-
-        ClassPathResource resource = new ClassPathResource("prompts/job-assistant-system-prompt.txt");
-        String systemPrompt = null;
-        try {
-            systemPrompt = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String systemPrompt = getSystemPrompt();
 
         String reply = chatClient.prompt()
                 .system(systemPrompt)
                 .user(command.userPrompt())
+                .advisors(simpleLoggerAdvisor)
                 .tools(jobSearchTools)
                 .call()
                 .content();
@@ -80,5 +79,16 @@ public class ProcessUserPrompt {
         ));
         logger.debug("user prompt saved with PROCESSED status");
         return reply;
+    }
+
+    private static String getSystemPrompt() {
+        ClassPathResource resource = new ClassPathResource("prompts/job-assistant-system-prompt.txt");
+        String systemPrompt;
+        try {
+            systemPrompt = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return systemPrompt;
     }
 }

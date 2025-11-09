@@ -2,6 +2,7 @@ package com.aitools.jobsearcher.adapter.controller;
 
 import com.aitools.jobsearcher.application.commands.ProcessUserPromptCommand;
 import com.aitools.jobsearcher.application.usecases.ProcessUserPrompt;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ public class ChatController {
 
     private final ProcessUserPrompt processUserPrompt;
 
+
     public ChatController(ProcessUserPrompt processUserPrompt) {
         this.processUserPrompt = processUserPrompt;
     }
@@ -22,6 +24,7 @@ public class ChatController {
         String reply = processUserPrompt.execute(new ProcessUserPromptCommand(userInput));
         model.addAttribute("userInput", userInput);
         model.addAttribute("reply", reply);
+
 
         return "chat"; // Return the Thymeleaf view name
     }
