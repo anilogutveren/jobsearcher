@@ -13,7 +13,7 @@ spring:
       api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: gpt-4
+          model: gpt-4o
     vectorstore:
       pgvector:
         initialize-schema: true
@@ -23,6 +23,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+tavily:
+  api-key: ${TAVILY_API_KEY}
 
 logging:
   level:

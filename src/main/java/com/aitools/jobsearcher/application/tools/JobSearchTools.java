@@ -8,17 +8,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class JobSearchTools {
 
     private static final Logger log = LoggerFactory.getLogger(JobSearchTools.class);
+
+    @Value("${tavily.api-key}")
+    private String apiKey;
 
     private final IngestionService ingestionService;
 
@@ -43,18 +50,47 @@ public class JobSearchTools {
         log.info("Ingested cover letter from classpath resource.");
     }
 
-    @Tool(description = "Search the web for jobs in real time for the user's query.")
+    @Tool(description = "Performs a real-time web search and returns summarized results with URLs")
     public String webSearch(String query) {
         try {
-            String apiUrl = "https://api.duckduckgo.com/?q="
-                    + URLEncoder.encode(query, StandardCharsets.UTF_8)
-                    + "&format=json";
-            String response = restTemplate.getForObject(apiUrl, String.class);
-            log.info("Searched web for query: {}", query);
-            return response;
+            String url = "https://api.tavily.com/search";
+            Map<String, Object> body = Map.of(
+                    "query", query,
+                    "max_results", 5,
+                    "include_answer", true
+            );
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + apiKey);
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return formatResults(response.getBody());
+            } else {
+                return "No web search results found.";
+            }
         } catch (Exception e) {
-            log.error("Error performing web search: {}", e.getMessage());
-            return "Failed to fetch search results.";
+            return "Error during Tavily search: " + e.getMessage();
         }
+    }
+
+    private String formatResults(Map<String, Object> response) {
+        StringBuilder sb = new StringBuilder("### 🌐 Web Search Results:\n\n");
+
+        if (response.containsKey("answer")) {
+            sb.append("**Summary:** ").append(response.get("answer")).append("\n\n");
+        }
+
+        if (response.containsKey("results")) {
+            List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
+            for (Map<String, Object> r : results) {
+                sb.append("**").append(r.get("title")).append("**\n")
+                        .append(r.get("url")).append("\n\n");
+            }
+        }
+        return sb.toString();
     }
 }
