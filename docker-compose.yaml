@@ -1,11 +1,40 @@
 services:
-  pgvector:
-    image: 'pgvector/pgvector:pg16'
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: jobsearcher-db
     environment:
-      - 'POSTGRES_DB=jobsearchDB'
-      - 'POSTGRES_PASSWORD=password'
-      - 'POSTGRES_USER=user'
-    labels:
-      - "org.springframework.boot.service-connection=postgres"
+      POSTGRES_DB: jobsearchDB
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
-      - '5432:5432'
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d jobsearchDB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jobsearcher-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/jobsearchDB
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      TAVILY_API_KEY: ${TAVILY_API_KEY}
+      JAVA_OPTS: -Xms256m -Xmx512m
+    ports:
+      - "8085:8085"
+    restart: unless-stopped
+
+volumes:
+  db-data:

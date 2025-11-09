@@ -9,7 +9,7 @@ public class PageController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-        return "index";
+        return "upload";
     }
 
     @GetMapping("/chat")
