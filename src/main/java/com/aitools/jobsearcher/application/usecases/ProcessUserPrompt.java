@@ -1,5 +1,6 @@
 package com.aitools.jobsearcher.application.usecases;
 
+import com.aitools.jobsearcher.adapter.otlm.model.Job;
 import com.aitools.jobsearcher.adapter.persistence.UserPromptRepositoryAdapter;
 import com.aitools.jobsearcher.application.commands.ProcessUserPromptCommand;
 import com.aitools.jobsearcher.application.tools.JobSearchTools;
@@ -10,14 +11,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
+import org.springframework.ai.converter.BeanOutputConverter;
+import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.List;
 
 @Component
 public class ProcessUserPrompt {
@@ -31,6 +36,7 @@ public class ProcessUserPrompt {
     private final JobSearchTools jobSearchTools;
 
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
+
 
     public ProcessUserPrompt(ChatClient.Builder builder,
                              VectorStore vectorStore,
@@ -52,6 +58,11 @@ public class ProcessUserPrompt {
     }
 
     public String execute(ProcessUserPromptCommand command) {
+
+        // Setup the converter for List<Job>
+        // We use BeanOutputConverter because 'Job' is a complex structure (Record), not a simple String.
+        var outputConverter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<Job>>() {});
+
         logger.info("Processing user prompt");
         PromptEntity promptEntity = new PromptEntity(
                 null,
@@ -60,25 +71,29 @@ public class ProcessUserPrompt {
                 Instant.now());
         promptEntity = userPromptRepositoryAdapter.saveOrUpdate(promptEntity);
 
-        String systemPrompt = getSystemPrompt();
+        // Add the JSON schema format instructions to the System Prompt
+        // This tells the AI: "Output valid JSON where every item has title, company, etc."
+        String systemPrompt = getSystemPrompt() + System.lineSeparator() + outputConverter.getFormat();
 
-        String reply = chatClient.prompt()
+        List<Job> jobs = chatClient.prompt()
                 .system(systemPrompt)
                 .user(command.userPrompt())
                 .advisors(simpleLoggerAdvisor)
                 .tools(jobSearchTools)
                 .call()
-                .content();
+                .entity(outputConverter);
 
-        logger.info("Processed user prompt");
+        logger.info("Extracted {} jobs from AI response", jobs.size());
+
+        // Logic to save status
         userPromptRepositoryAdapter.saveOrUpdate(new PromptEntity(
                 promptEntity.id(),
                 promptEntity.userInput(),
                 PromptStatus.PROCESSED,
                 promptEntity.createdAt()
         ));
-        logger.debug("user prompt saved with PROCESSED status");
-        return reply;
+
+        return jobs.toString();
     }
 
     private static String getSystemPrompt() {
