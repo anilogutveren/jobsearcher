@@ -3,7 +3,6 @@ package com.aitools.jobsearcher.adapter.controller;
 import com.aitools.jobsearcher.adapter.otlm.OtlmAppService;
 import com.aitools.jobsearcher.application.commands.ProcessUserPromptCommand;
 import com.aitools.jobsearcher.application.usecases.ProcessUserPrompt;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;

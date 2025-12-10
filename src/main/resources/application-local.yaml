@@ -45,3 +45,6 @@ logging:
             client:
               advisor:
                 SimpleLoggerAdvisor: INFO
+
+otlm:
+  base-url: http://localhost:8082/jobs
