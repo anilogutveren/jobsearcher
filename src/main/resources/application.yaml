@@ -28,6 +28,9 @@ spring:
 tavily:
   api-key: ${TAVILY_API_KEY}
 
+otlm:
+  base-url: http://host.docker.internal:8082
+
 logging:
   level:
     org:
