@@ -21,7 +21,7 @@ public class ChatController {
         this.otlmAppService = otlmAppService;
     }
 
-    @PostMapping("/processUserPrompt")
+    @PostMapping("/chat")
     public String handleChat(@RequestParam("userInput") String userInput, Model model) {
         userInput = userInput + "\nProvide the response in JSON format suitable for job listings.";
 

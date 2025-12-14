@@ -93,7 +93,7 @@
 <h1>Chat with Jobsearcher</h1>
 <h2 th:text="${message}">Default message</h2>
 
-<form th:action="@{/processUserPrompt}" method="post">
+<form th:action="@{/chat}" method="post">
     <div>
         <label for="userInput">Your message</label><br/>
         <textarea id="userInput" name="userInput" required th:text="${userInput}"></textarea>

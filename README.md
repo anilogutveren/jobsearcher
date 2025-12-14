@@ -17,10 +17,17 @@ After starting the app, open localhost:8080/chat in your browser to access the w
 You can upload your CV and Cover Letter files using the provided form. Once uploaded, you can ask questions related to the content of these documents.
 You can search for a job in your wished location using the job search chat.
 
-![Thymeleaf_MainPage.png](src/main/resources/docs/Thymeleaf_MainPage.png)
+
 
 
 #### Local Development
+
+Note!
+Unfortunately, the local profile does not work yet due to Ollama model limitations. Text Embedding model is not supported in Ollama currently. Please use docker desktop model runner to run the Llama3.2 model locally.
+To overcome this, we need to implement the include Ollama dependencies and create separate profile for Ollama.
+See --> https://docs.spring.io/spring-ai/reference/api/embeddings/ollama-embeddings.html
+
+
 To run the application locally using Docker Compose, follow these steps:
 Run the Llama3.2 model on docker desktop model runnner
 open the port
