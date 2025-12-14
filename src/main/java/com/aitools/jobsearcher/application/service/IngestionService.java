@@ -10,14 +10,13 @@ import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class IngestionService implements CommandLineRunner {
+public class IngestionService {
 
     private static final Logger log = LoggerFactory.getLogger(IngestionService.class);
     private final VectorStore vectorStore;
@@ -27,12 +26,6 @@ public class IngestionService implements CommandLineRunner {
 
     public IngestionService(VectorStore vectorStore) {
         this.vectorStore = vectorStore;
-    }
-
-    @Override
-    public void run(String... arg) {
-        // keep startup behavior using the configured cvPDF
-        ingest(cvPDF);
     }
 
     // public method so callers can pass any Resource (classpath or filesystem)

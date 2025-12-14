@@ -20,6 +20,15 @@ You can search for a job in your wished location using the job search chat.
 ![Thymeleaf_MainPage.png](src/main/resources/docs/Thymeleaf_MainPage.png)
 
 
+#### Local Development
+To run the application locally using Docker Compose, follow these steps:
+Run the Llama3.2 model on docker desktop model runnner
+open the port
+docker desktop enable model-runner --tcp=12434
+
+Than test it with the following curl command:
+curl http://localhost:12434/engines/llama.cpp/v1/chat/completions \  -H "Content-Type: application/json" \  -d '{    "model": "ai/llama3.2:latest",    "messages": [      {"role": "user", "content": "Tell me about Docker Model Runner."}    ]  }'
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 

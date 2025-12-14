@@ -1,15 +1,10 @@
-server:
-  port: 8085
-
 spring:
   ai:
     openai:
-      base-url: http://localhost:12434/engines/llama.cpp
-      api-key: dummy
+      api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: ai/llama3.2:latest
-
+          model: gpt-4o
     vectorstore:
       pgvector:
         initialize-schema: true
@@ -17,12 +12,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 otlm:
-  base-url: http://localhost:8082/jobs
+  base-url: http://host.docker.internal:8082
 
 logging:
   level:
@@ -38,4 +30,3 @@ logging:
             client:
               advisor:
                 SimpleLoggerAdvisor: INFO
-

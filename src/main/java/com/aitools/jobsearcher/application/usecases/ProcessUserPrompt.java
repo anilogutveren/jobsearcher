@@ -12,7 +12,6 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.converter.BeanOutputConverter;
-import org.springframework.ai.converter.ListOutputConverter;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.core.ParameterizedTypeReference;
@@ -50,7 +49,7 @@ public class ProcessUserPrompt {
 
         this.userPromptRepositoryAdapter = userPromptRepositoryAdapter;
         this.chatClient = builder
-                .defaultAdvisors(new QuestionAnswerAdvisor(vectorStore))
+                .defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore).build())
                 .defaultOptions(chatOptions)
                 .build();
         this.jobSearchTools = jobSearchTools;
@@ -61,7 +60,8 @@ public class ProcessUserPrompt {
 
         // Setup the converter for List<Job>
         // We use BeanOutputConverter because 'Job' is a complex structure (Record), not a simple String.
-        var outputConverter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<Job>>() {});
+        var outputConverter = new BeanOutputConverter<>(new ParameterizedTypeReference<List<Job>>() {
+        });
 
         logger.info("Processing user prompt");
         PromptEntity promptEntity = new PromptEntity(
